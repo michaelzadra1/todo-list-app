@@ -1,8 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import OAuthLoginButton from './OAuthLoginButton';
 
 const App = () => {
-	return <div>todo app</div>;
+	return (
+		<React.Fragment>
+			<OAuthLoginButton />
+		</React.Fragment>
+	);
 };
 
 export default App;

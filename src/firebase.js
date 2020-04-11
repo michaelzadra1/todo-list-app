@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
 
-const firebaseApp = initializeApp({
+const firebaseConfig = initializeApp({
 	apiKey: process.env.REACT_APP_FIREBASE_KEY,
 	authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
 	databaseURL: process.env.REACT_APP_FIREBASE_DATABASE,
@@ -10,4 +10,4 @@ const firebaseApp = initializeApp({
 	messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
 });
 
-export default firebaseApp;
+export default firebaseConfig;
