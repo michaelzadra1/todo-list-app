@@ -6,14 +6,8 @@ import { Avatar, Box, Button } from '@material-ui/core';
 import { AuthContext } from '../context/Auth';
 import firebaseConfig from '../firebase';
 
-const uiConfig = {
-	signInFlow: 'popup',
-	signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID]
-};
-
 const OAuthLoginButton = () => {
-	const { currentUser } = useContext(AuthContext);
-	const isSignedIn = !!currentUser;
+	const { currentUser, isSignedIn } = useContext(AuthContext);
 
 	return isSignedIn ? (
 		<Box
@@ -33,7 +27,10 @@ const OAuthLoginButton = () => {
 		</Box>
 	) : (
 		<StyledFirebaseAuth
-			uiConfig={uiConfig}
+			uiConfig={{
+				signInFlow: 'popup',
+				signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID]
+			}}
 			firebaseAuth={firebaseConfig.auth()}
 		/>
 	);
