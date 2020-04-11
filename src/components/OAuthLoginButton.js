@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
 import { Avatar, Box, Button } from '@material-ui/core';
+
+import { AuthContext } from '../context/Auth';
 import firebaseConfig from '../firebase';
-import useUser from '../hooks/useUser';
 
 const uiConfig = {
 	signInFlow: 'popup',
@@ -12,9 +12,8 @@ const uiConfig = {
 };
 
 const OAuthLoginButton = () => {
-	const user = useUser();
-
-	const isSignedIn = !!user;
+	const { currentUser } = useContext(AuthContext);
+	const isSignedIn = !!currentUser;
 
 	return isSignedIn ? (
 		<Box
@@ -23,7 +22,7 @@ const OAuthLoginButton = () => {
 			alignItems="center"
 			width={'235px'}
 		>
-			<Avatar alt={user.displayName} src={user.photoURL} />
+			<Avatar alt={currentUser.displayName} src={currentUser.photoURL} />
 			<Button
 				variant="contained"
 				onClick={() => firebaseConfig.auth().signOut()}
