@@ -1,10 +1,13 @@
+import 'typeface-roboto';
 import React from 'react';
-import OAuthLoginButton from './OAuthLoginButton';
+import Header from './Header';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const App = () => {
 	return (
 		<React.Fragment>
-			<OAuthLoginButton />
+			<CssBaseline />
+			<Header />
 		</React.Fragment>
 	);
 };
