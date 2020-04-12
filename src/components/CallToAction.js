@@ -21,7 +21,7 @@ const CallToAction = () => {
 					color="textPrimary"
 					gutterBottom
 				>
-					Welcome to To Do
+					Welcome to To-Do
 				</Typography>
 				<Typography
 					component="h2"
@@ -30,7 +30,7 @@ const CallToAction = () => {
 					color="textSecondary"
 				>
 					{`Happy ${dayOfTheWeek}! ${
-						isSignedIn ? "Manage your To Do's below" : 'Please sign In'
+						isSignedIn ? "Manage your To-do's below" : 'Please sign In'
 					}`}
 				</Typography>
 			</Box>

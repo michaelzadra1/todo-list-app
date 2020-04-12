@@ -13,7 +13,7 @@ const Header = () => {
 					width={'100%'}
 					height={'72px'}
 				>
-					<Typography component={'h1'}>To Do Application</Typography>
+					<Typography component={'h1'}>To-Do Application</Typography>
 					<OAuthLoginButton />
 				</Box>
 			</Toolbar>
