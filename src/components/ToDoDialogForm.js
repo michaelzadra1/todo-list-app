@@ -18,7 +18,7 @@ import {
 	KeyboardDateTimePicker,
 	MuiPickersUtilsProvider
 } from '@material-ui/pickers';
-import { isEmpty } from 'lodash';
+import { isEmpty, capitalize } from 'lodash';
 
 import { AuthContext } from '../context/Auth';
 import { createToDo } from '../api/repository.js';
@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
 	tagsInput: {
 		marginTop: theme.spacing(2),
 		marginBottom: theme.spacing(1)
+	},
+	dialogTitle: {
+		paddingBottom: 0
 	},
 	dialogActions: {
 		padding: `${theme.spacing(1)}px ${theme.spacing(3)}px ${theme.spacing(
@@ -125,14 +128,14 @@ const ToDoDialogForm = (props) => {
 			fullWidth
 			maxWidth="sm"
 		>
-			<DialogTitle id="create-todo-item">
+			<DialogTitle id="create-todo-item" className={classes.dialogTitle}>
 				<CreateIcon className={classes.createIcon} />
-				{`${mode.toLowerCase()} To-Do`}
+				{`${capitalize(mode)} To-Do`}
 			</DialogTitle>
 			<form onSubmit={handleSubmit} autoComplete="off">
 				<DialogContent>
 					<DialogContentText component="h3">
-						{`${mode.toLowerCase()} to-do item below`}
+						{`${capitalize(mode)} to-do item below`}
 					</DialogContentText>
 					{/* Title */}
 					<TextField
@@ -188,7 +191,7 @@ const ToDoDialogForm = (props) => {
 							}}
 						/>
 					</MuiPickersUtilsProvider>
-					{/* Categorization */}
+					{/* Categorization Tags */}
 					<Autocomplete
 						className={classes.tagsInput}
 						id="to-do-tags"
@@ -204,7 +207,6 @@ const ToDoDialogForm = (props) => {
 							<TextField {...params} variant="outlined" label="Tags" />
 						)}
 					/>
-					{/* Subtasks */}
 				</DialogContent>
 				<DialogActions className={classes.dialogActions}>
 					<Button onClick={closeDialog} variant="contained">
