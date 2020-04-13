@@ -88,7 +88,7 @@ const ToDoDialogForm = (props) => {
 				status: isEmpty(status) ? 'pending' : status
 			});
 			setLoading(false);
-			closeDialog();
+			closeDialog({ fetchToDos: true });
 		} catch (err) {
 			console.log(err);
 			setLoading(false);

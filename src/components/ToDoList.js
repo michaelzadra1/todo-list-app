@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Fab, Grid, makeStyles } from '@material-ui/core';
+import { Fab, Grid, makeStyles, Typography, Box } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
 import ToDoDialogForm from './ToDoDialogForm';
@@ -25,10 +25,32 @@ const ToDoList = (props) => {
 		setOpen(true);
 	};
 
-	const handleClose = () => {
+	const handleClose = ({ fetchToDos }) => {
 		setOpen(false);
 		setSelectedToDo({});
+		if (fetchToDos) {
+			props.refreshList();
+		}
 	};
+
+	const renderEmptyToDos = () => (
+		<Box
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			height={400}
+		>
+			<Typography
+				component="h2"
+				variant="h6"
+				color="textSecondary"
+				align="center"
+				style={{ marginTop: '20px' }}
+			>
+				Looks like you have no to-dos. Please create one!
+			</Typography>
+		</Box>
+	);
 
 	const { toDos } = props;
 
@@ -49,20 +71,24 @@ const ToDoList = (props) => {
 			>
 				<Add />
 			</Fab>
-			<Grid
-				className={classes.toDoListContainer}
-				container
-				spacing={4}
-				component="ul"
-			>
-				{toDos.map((toDo) => (
-					<ToDoCard
-						key={toDo.id}
-						toDoItem={toDo}
-						openDialog={handleOpen}
-					/>
-				))}
-			</Grid>
+			{toDos.length > 0 ? (
+				<Grid
+					className={classes.toDoListContainer}
+					container
+					spacing={4}
+					component="ul"
+				>
+					{toDos.map((toDo) => (
+						<ToDoCard
+							key={toDo.id}
+							toDoItem={toDo}
+							openDialog={handleOpen}
+						/>
+					))}
+				</Grid>
+			) : (
+				renderEmptyToDos()
+			)}
 		</React.Fragment>
 	);
 };

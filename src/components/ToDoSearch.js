@@ -12,21 +12,23 @@ const ToDoSearch = () => {
 	const [error, setError] = useState('');
 
 	useEffect(() => {
-		const handleFetchToDos = async () => {
-			setLoading(true);
-			try {
-				const snapshot = await fetchToDos(currentUser.uid);
-				setToDos(snapshot.docs.map((doc) => doc.data()));
-				setLoading(false);
-			} catch (err) {
-				setLoading(false);
-				setError('Error fetching to-dos.');
-			}
-		};
 		if (isSignedIn) {
 			handleFetchToDos();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isSignedIn, currentUser]);
+
+	const handleFetchToDos = async () => {
+		setLoading(true);
+		try {
+			const snapshot = await fetchToDos(currentUser.uid);
+			setToDos(snapshot.docs.map((doc) => doc.data()));
+			setLoading(false);
+		} catch (err) {
+			setLoading(false);
+			setError('Error fetching to-dos.');
+		}
+	};
 
 	const renderError = () => (
 		<FormHelperText role="error" error={true}>
@@ -40,7 +42,7 @@ const ToDoSearch = () => {
 		) : error ? (
 			renderError()
 		) : (
-			<ToDoList toDos={toDos} />
+			<ToDoList toDos={toDos} refreshList={handleFetchToDos} />
 		);
 	};
 

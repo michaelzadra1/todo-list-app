@@ -3,22 +3,26 @@ import { isEmpty } from 'lodash';
 
 export const updateToDo = async (userId, toDo) => {
 	const db = firebaseConfig.firestore();
-	let id;
 	if (isEmpty(toDo.id)) {
+		// We are creating a new to-do
 		const ref = db.collection('users').doc(userId).collection('todos').doc();
-		id = ref.id;
-	} else {
-		id = toDo.id;
+		toDo.id = ref.id;
+		toDo.timeStamp = new Date();
 	}
 	return db
 		.collection('users')
 		.doc(userId)
 		.collection('todos')
-		.doc(id)
-		.set({ ...toDo, id });
+		.doc(toDo.id)
+		.set(toDo);
 };
 
 export const fetchToDos = async (userId) => {
 	const db = firebaseConfig.firestore();
-	return db.collection('users').doc(userId).collection('todos').get();
+	return db
+		.collection('users')
+		.doc(userId)
+		.collection('todos')
+		.orderBy('timeStamp', 'desc')
+		.get();
 };
