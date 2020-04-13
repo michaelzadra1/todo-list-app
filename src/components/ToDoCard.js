@@ -87,7 +87,16 @@ const ToDoCard = (props) => {
 							</IconButton>
 						</Tooltip>
 						<Tooltip title="Delete" placement="top">
-							<IconButton aria-label="delete to-do item" size="medium">
+							<IconButton
+								aria-label="delete to-do item"
+								size="medium"
+								onClick={() =>
+									props.openDialog({
+										toDo: props.toDoItem,
+										mode: 'DELETE'
+									})
+								}
+							>
 								<Delete fontSize="inherit" />
 							</IconButton>
 						</Tooltip>

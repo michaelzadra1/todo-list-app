@@ -17,6 +17,16 @@ export const updateToDo = async (userId, toDo) => {
 		.set(toDo);
 };
 
+export const deleteToDo = async (userId, toDoId) => {
+	const db = firebaseConfig.firestore();
+	return db
+		.collection('users')
+		.doc(userId)
+		.collection('todos')
+		.doc(toDoId)
+		.delete();
+};
+
 export const fetchToDos = async (userId) => {
 	const db = firebaseConfig.firestore();
 	return db

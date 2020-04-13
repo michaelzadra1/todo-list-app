@@ -103,7 +103,6 @@ const ToDoDialogForm = (props) => {
 			setLoading(false);
 			closeDialog({ fetchToDos: true });
 		} catch (err) {
-			console.log(err);
 			setLoading(false);
 			setError({ ...error, submit: 'Error deleting to-do.' });
 		}
@@ -285,9 +284,7 @@ const ToDoDialogForm = (props) => {
 			fullWidth
 			maxWidth="sm"
 		>
-			{mode === 'DELETE' || true
-				? renderToDoDeleteDialog()
-				: renderEditToDoDialog()}
+			{mode === 'DELETE' ? renderToDoDeleteDialog() : renderEditToDoDialog()}
 		</Dialog>
 	);
 };
