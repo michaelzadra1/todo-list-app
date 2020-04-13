@@ -107,8 +107,8 @@ const ToDoCard = (props) => {
 						>
 							Due Date
 						</Typography>
-						<Typography variant="body1" component="p">
-							<Box display="flex" alignItems="center">
+						<Box display="flex" alignItems="center">
+							<Typography variant="body1" component="p">
 								<Event
 									style={{
 										marginLeft: '-3px',
@@ -116,8 +116,8 @@ const ToDoCard = (props) => {
 									}}
 								/>
 								{formattedDate}
-							</Box>
-						</Typography>
+							</Typography>
+						</Box>
 					</Box>
 					{/* Tags */}
 					{tags.length > 0 ? (
