@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CircularProgress, FormHelperText, Container } from '@material-ui/core';
+import { union } from 'lodash';
 
 import ToDoList from './ToDoList';
 import { AuthContext } from '../context/Auth';
 import { fetchToDos } from '../api/repository';
+import ToDoSearchFilters from './ToDoSearchFilters';
 
 const ToDoSearch = () => {
 	const { isSignedIn, currentUser } = useContext(AuthContext);
@@ -46,9 +48,24 @@ const ToDoSearch = () => {
 		);
 	};
 
+	const renderToDoSearchFilters = () => {
+		let tags = [];
+		toDos.forEach((toDo) => {
+			tags = union(tags, toDo.tags);
+		});
+		return <ToDoSearchFilters searchableTags={tags} />;
+	};
+
 	return (
 		<Container maxWidth="sm">
-			{isSignedIn ? renderToDoList() : <div>Plese sign in</div>}
+			{isSignedIn ? (
+				<React.Fragment>
+					{renderToDoSearchFilters()}
+					{renderToDoList()}
+				</React.Fragment>
+			) : (
+				<div>Plese sign in</div>
+			)}
 		</Container>
 	);
 };

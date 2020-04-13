@@ -47,7 +47,10 @@ const ToDoList = (props) => {
 				align="center"
 				style={{ marginTop: '20px' }}
 			>
-				No Results 😔
+				No Results{' '}
+				<span role="img" aria-label="sad face">
+					😔
+				</span>
 			</Typography>
 		</Box>
 	);
