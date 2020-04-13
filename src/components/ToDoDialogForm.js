@@ -103,7 +103,7 @@ const ToDoDialogForm = (props) => {
 	const handleUpdateToDo = async () => {
 		try {
 			setLoading(true);
-			await createToDo(currentUser.uid, toDo);
+			await createToDo(currentUser.uid, { ...toDo, status: 'pending' });
 			setLoading(false);
 			closeDialog();
 		} catch (err) {

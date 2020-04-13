@@ -52,7 +52,7 @@ const ToDoList = (props) => {
 				component="ul"
 			>
 				{toDos.map((toDo) => (
-					<ToDoCard toDoItem={toDo} />
+					<ToDoCard toDoItem={toDo} key={toDo.id} />
 				))}
 			</Grid>
 		</React.Fragment>
