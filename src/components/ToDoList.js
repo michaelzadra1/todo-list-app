@@ -16,10 +16,12 @@ const ToDoList = (props) => {
 	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
+	const [mode, setMode] = useState(false);
 	const [selectedToDo, setSelectedToDo] = useState({});
 
-	const handleOpen = () => {
-		setSelectedToDo({});
+	const handleOpen = ({ toDo, mode }) => {
+		setSelectedToDo(toDo);
+		setMode(mode);
 		setOpen(true);
 	};
 
@@ -32,16 +34,18 @@ const ToDoList = (props) => {
 
 	return (
 		<React.Fragment>
-			<ToDoDialogForm
-				toDoItem={selectedToDo}
-				open={open}
-				mode={'CREATE'}
-				closeDialog={handleClose}
-			/>
+			{open ? (
+				<ToDoDialogForm
+					toDoItem={selectedToDo}
+					open={open}
+					mode={mode}
+					closeDialog={handleClose}
+				/>
+			) : null}
 			<Fab
 				color="primary"
 				aria-label="create to-do item"
-				onClick={handleOpen}
+				onClick={() => handleOpen({ toDo: {}, mode: 'CREATE' })}
 			>
 				<Add />
 			</Fab>
@@ -52,7 +56,11 @@ const ToDoList = (props) => {
 				component="ul"
 			>
 				{toDos.map((toDo) => (
-					<ToDoCard toDoItem={toDo} key={toDo.id} />
+					<ToDoCard
+						key={toDo.id}
+						toDoItem={toDo}
+						openDialog={handleOpen}
+					/>
 				))}
 			</Grid>
 		</React.Fragment>

@@ -76,6 +76,12 @@ const ToDoCard = (props) => {
 								className={classes.noBoxShadow}
 								aria-label="edit to-do item"
 								size="medium"
+								onClick={() =>
+									props.openDialog({
+										toDo: props.toDoItem,
+										mode: 'EDIT'
+									})
+								}
 							>
 								<Edit fontSize="inherit" />
 							</IconButton>
@@ -108,15 +114,14 @@ const ToDoCard = (props) => {
 							Due Date
 						</Typography>
 						<Box display="flex" alignItems="center">
-							<Typography variant="body1" component="p">
-								<Event
-									style={{
-										marginLeft: '-3px',
-										marginRight: '5px'
-									}}
-								/>
-								{formattedDate}
-							</Typography>
+							<Typography variant="body1" component="p"></Typography>
+							<Event
+								style={{
+									marginLeft: '-3px',
+									marginRight: '5px'
+								}}
+							/>
+							{formattedDate}
 						</Box>
 					</Box>
 					{/* Tags */}

@@ -19,9 +19,10 @@ import {
 	MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import { isEmpty, capitalize } from 'lodash';
+import moment from 'moment';
 
 import { AuthContext } from '../context/Auth';
-import { createToDo } from '../api/repository.js';
+import { updateToDo } from '../api/repository.js';
 
 const useStyles = makeStyles((theme) => ({
 	createIcon: {
@@ -58,6 +59,8 @@ const ToDoDialogForm = (props) => {
 
 	const { toDoItem, open, mode, closeDialog } = props;
 
+	const { title, description, dueDate, tags, status } = toDo;
+
 	useEffect(() => {
 		setError({
 			title: '',
@@ -71,8 +74,27 @@ const ToDoDialogForm = (props) => {
 					dueDate: new Date(),
 					tags: []
 			  })
-			: setToDo({ ...toDoItem });
+			: setToDo({
+					...toDoItem,
+					dueDate: moment(toDoItem.dueDate.toDate()).toDate()
+			  });
 	}, [toDoItem, mode]);
+
+	const handleUpdateToDo = async () => {
+		try {
+			setLoading(true);
+			await updateToDo(currentUser.uid, {
+				...toDo,
+				status: isEmpty(status) ? 'pending' : status
+			});
+			setLoading(false);
+			closeDialog();
+		} catch (err) {
+			console.log(err);
+			setLoading(false);
+			setError({ ...error, submit: 'Error submitting to-do.' });
+		}
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -100,25 +122,11 @@ const ToDoDialogForm = (props) => {
 		}
 	};
 
-	const handleUpdateToDo = async () => {
-		try {
-			setLoading(true);
-			await createToDo(currentUser.uid, { ...toDo, status: 'pending' });
-			setLoading(false);
-			closeDialog();
-		} catch (err) {
-			setLoading(false);
-			setError({ ...error, submit: 'Error submitting to-do.' });
-		}
-	};
-
 	const renderError = () => (
 		<FormHelperText role="error" error={true} className={classes.dialogError}>
 			{error.submit}
 		</FormHelperText>
 	);
-
-	const { title, description, dueDate, tags } = toDo;
 
 	return (
 		<Dialog
@@ -196,8 +204,9 @@ const ToDoDialogForm = (props) => {
 						className={classes.tagsInput}
 						id="to-do-tags"
 						multiple
-						options={tags}
 						getOptionLabel={(option) => option.toLowerCase()}
+						options={tags}
+						value={tags}
 						onChange={(_, values) =>
 							setToDo({ ...toDo, tags: [...values] })
 						}

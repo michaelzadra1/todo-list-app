@@ -1,14 +1,21 @@
 import firebaseConfig from '../firebase';
+import { isEmpty } from 'lodash';
 
-export const createToDo = async (userId, toDo) => {
+export const updateToDo = async (userId, toDo) => {
 	const db = firebaseConfig.firestore();
-	const ref = db.collection('users').doc(userId).collection('todos').doc();
+	let id;
+	if (isEmpty(toDo.id)) {
+		const ref = db.collection('users').doc(userId).collection('todos').doc();
+		id = ref.id;
+	} else {
+		id = toDo.id;
+	}
 	return db
 		.collection('users')
 		.doc(userId)
 		.collection('todos')
-		.doc(ref.id)
-		.set({ ...toDo, id: ref.id });
+		.doc(id)
+		.set({ ...toDo, id });
 };
 
 export const fetchToDos = async (userId) => {
