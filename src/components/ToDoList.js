@@ -45,7 +45,6 @@ const ToDoList = (props) => {
 				variant="h6"
 				color="textSecondary"
 				align="center"
-				style={{ marginTop: '20px' }}
 			>
 				No Results{' '}
 				<span role="img" aria-label="sad face">

@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { CircularProgress, FormHelperText, Container } from '@material-ui/core';
+import {
+	CircularProgress,
+	FormHelperText,
+	Container,
+	Typography,
+	Box
+} from '@material-ui/core';
 import { union } from 'lodash';
 
 import ToDoList from './ToDoList';
@@ -38,6 +44,28 @@ const ToDoSearch = () => {
 		</FormHelperText>
 	);
 
+	const renderSignInMessage = () => (
+		<Box
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			height={250}
+			fontStyle="italic"
+		>
+			<Typography
+				component="h2"
+				variant="h6"
+				color="textSecondary"
+				align="center"
+			>
+				Please Sign In{' '}
+				<span role="img" aria-label="happy sun">
+					🌞
+				</span>
+			</Typography>
+		</Box>
+	);
+
 	const renderToDoList = () => {
 		return loading ? (
 			<CircularProgress />
@@ -64,7 +92,7 @@ const ToDoSearch = () => {
 					{renderToDoList()}
 				</React.Fragment>
 			) : (
-				<div>Plese sign in</div>
+				renderSignInMessage()
 			)}
 		</Container>
 	);

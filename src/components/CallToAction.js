@@ -29,7 +29,7 @@ const CallToAction = () => {
 					color="textSecondary"
 				>
 					{`Happy ${dayOfTheWeek}! ${
-						isSignedIn ? 'Manage your To-Dos Below' : 'Please sign In'
+						isSignedIn ? 'Manage your To-Dos Below' : ''
 					}`}
 				</Typography>
 			</Box>
