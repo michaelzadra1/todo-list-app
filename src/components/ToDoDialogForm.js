@@ -224,7 +224,6 @@ const ToDoDialogForm = (props) => {
 						<KeyboardDateTimePicker
 							id="to-do-due-date"
 							label="Due Date"
-							disablePast
 							inputVariant="outlined"
 							margin="normal"
 							value={dueDate}
