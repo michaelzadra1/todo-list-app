@@ -73,6 +73,8 @@ const ToDoDialogForm = (props) => {
 					title: '',
 					description: '',
 					dueDate: new Date(),
+					pending: true,
+					complete: false,
 					tags: []
 			  })
 			: setToDo({
@@ -84,10 +86,7 @@ const ToDoDialogForm = (props) => {
 	const handleUpdateToDo = async () => {
 		try {
 			setLoading(true);
-			await updateToDo(currentUser.uid, {
-				...toDo,
-				status: isEmpty(status) ? 'pending' : status
-			});
+			await updateToDo(currentUser.uid, toDo);
 			setLoading(false);
 			closeDialog({ fetchToDos: true });
 		} catch (err) {
