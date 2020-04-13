@@ -9,10 +9,11 @@ import {
 	DialogActions,
 	CircularProgress,
 	FormHelperText,
+	Box,
 	makeStyles
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import CreateIcon from '@material-ui/icons/Create';
+import { Create, Delete } from '@material-ui/icons';
 import MomentUtils from '@date-io/moment';
 import {
 	KeyboardDateTimePicker,
@@ -22,7 +23,7 @@ import { isEmpty, capitalize } from 'lodash';
 import moment from 'moment';
 
 import { AuthContext } from '../context/Auth';
-import { updateToDo } from '../api/repository.js';
+import { updateToDo, deleteToDo } from '../api/repository.js';
 
 const useStyles = makeStyles((theme) => ({
 	createIcon: {
@@ -90,9 +91,21 @@ const ToDoDialogForm = (props) => {
 			setLoading(false);
 			closeDialog({ fetchToDos: true });
 		} catch (err) {
-			console.log(err);
 			setLoading(false);
 			setError({ ...error, submit: 'Error submitting to-do.' });
+		}
+	};
+
+	const handleDeleteToDo = async () => {
+		try {
+			setLoading(true);
+			await deleteToDo(currentUser.uid, props.toDoItem.id);
+			setLoading(false);
+			closeDialog({ fetchToDos: true });
+		} catch (err) {
+			console.log(err);
+			setLoading(false);
+			setError({ ...error, submit: 'Error deleting to-do.' });
 		}
 	};
 
@@ -128,17 +141,42 @@ const ToDoDialogForm = (props) => {
 		</FormHelperText>
 	);
 
-	return (
-		<Dialog
-			open={open}
-			onClose={closeDialog}
-			aria-labelledby="create-todo-item"
-			fullWidth
-			maxWidth="sm"
-		>
-			<DialogTitle id="create-todo-item" className={classes.dialogTitle}>
-				<CreateIcon className={classes.createIcon} />
-				{`${capitalize(mode)} To-Do`}
+	const renderToDoDeleteDialog = () => (
+		<React.Fragment>
+			<DialogTitle id={`delete-todo-item`} className={classes.dialogTitle}>
+				<Box display="flex" alignItems="center">
+					<Delete className={classes.createIcon} />
+					Are you sure you want to delete this To-Do item?
+				</Box>
+			</DialogTitle>
+			<DialogContent>
+				<DialogContentText id="alert-dialog-description">
+					After deletion, it cannot be recovered.
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={closeDialog} color="primary">
+					Cancel
+				</Button>
+				<Button onClick={handleDeleteToDo} color="secondary">
+					{loading ? (
+						<CircularProgress color="inherit" size={25} />
+					) : (
+						'Delete'
+					)}
+				</Button>
+			</DialogActions>
+			{!isEmpty(error.submit) ? renderError() : null}
+		</React.Fragment>
+	);
+
+	const renderEditToDoDialog = () => (
+		<React.Fragment>
+			<DialogTitle id={`${mode}-todo-item`} className={classes.dialogTitle}>
+				<Box display="flex" alignItems="center">
+					<Create className={classes.createIcon} />
+					{`${capitalize(mode)} To-Do`}
+				</Box>
 			</DialogTitle>
 			<form onSubmit={handleSubmit} autoComplete="off">
 				<DialogContent>
@@ -236,6 +274,20 @@ const ToDoDialogForm = (props) => {
 				</DialogActions>
 				{!isEmpty(error.submit) ? renderError() : null}
 			</form>
+		</React.Fragment>
+	);
+
+	return (
+		<Dialog
+			open={open}
+			onClose={closeDialog}
+			aria-labelledby={`${mode}-todo-item`}
+			fullWidth
+			maxWidth="sm"
+		>
+			{mode === 'DELETE' || true
+				? renderToDoDeleteDialog()
+				: renderEditToDoDialog()}
 		</Dialog>
 	);
 };
