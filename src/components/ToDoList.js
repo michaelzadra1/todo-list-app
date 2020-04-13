@@ -7,7 +7,7 @@ import ToDoCard from './ToDoCard';
 
 const useStyles = makeStyles((theme) => ({
 	toDoListContainer: {
-		padding: '32px',
+		padding: `${theme.spacing(3)}px ${theme.spacing(2)}px`,
 		listStyle: 'none'
 	}
 }));
@@ -38,7 +38,7 @@ const ToDoList = (props) => {
 			display="flex"
 			justifyContent="center"
 			alignItems="center"
-			height={400}
+			height={250}
 		>
 			<Typography
 				component="h2"
@@ -47,7 +47,7 @@ const ToDoList = (props) => {
 				align="center"
 				style={{ marginTop: '20px' }}
 			>
-				Looks like you have no to-dos. Please create one!
+				No Results 😔
 			</Typography>
 		</Box>
 	);
@@ -64,13 +64,17 @@ const ToDoList = (props) => {
 					closeDialog={handleClose}
 				/>
 			) : null}
-			<Fab
-				color="primary"
-				aria-label="create to-do item"
-				onClick={() => handleOpen({ toDo: {}, mode: 'CREATE' })}
-			>
-				<Add />
-			</Fab>
+			<Box display="flex" justifyContent="center" alignItems="center">
+				<Fab
+					variant="extended"
+					color="primary"
+					aria-label="create to-do item"
+					onClick={() => handleOpen({ toDo: {}, mode: 'CREATE' })}
+				>
+					<Add style={{ marginRight: '8px' }} />
+					Create To-Do
+				</Fab>
+			</Box>
 			{toDos.length > 0 ? (
 				<Grid
 					className={classes.toDoListContainer}
