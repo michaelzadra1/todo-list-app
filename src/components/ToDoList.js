@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import { Fab } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Fab, Grid, makeStyles } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 
 import ToDoDialogForm from './ToDoDialogForm';
+import ToDoCard from './ToDoCard';
 
-const ToDoList = () => {
+const useStyles = makeStyles((theme) => ({
+	toDoListContainer: {
+		padding: '32px',
+		listStyle: 'none'
+	}
+}));
+
+const ToDoList = (props) => {
+	const classes = useStyles();
+
 	const [open, setOpen] = useState(false);
 	const [selectedToDo, setSelectedToDo] = useState({});
 
@@ -18,6 +28,8 @@ const ToDoList = () => {
 		setSelectedToDo({});
 	};
 
+	const { toDos } = props;
+
 	return (
 		<React.Fragment>
 			<ToDoDialogForm
@@ -28,11 +40,21 @@ const ToDoList = () => {
 			/>
 			<Fab
 				color="primary"
-				aria-label="create to do item"
+				aria-label="create to-do item"
 				onClick={handleOpen}
 			>
-				<AddIcon />
+				<Add />
 			</Fab>
+			<Grid
+				className={classes.toDoListContainer}
+				container
+				spacing={4}
+				component="ul"
+			>
+				{toDos.map((toDo) => (
+					<ToDoCard toDoItem={toDo} />
+				))}
+			</Grid>
 		</React.Fragment>
 	);
 };
