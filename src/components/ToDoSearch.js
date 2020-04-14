@@ -26,7 +26,8 @@ const ToDoSearch = () => {
 		searchQuery: '',
 		tags: [],
 		pending: true,
-		complete: true
+		complete: true,
+		sortBy: 'Newest To-Dos'
 	});
 
 	useEffect(() => {
@@ -36,6 +37,17 @@ const ToDoSearch = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isSignedIn, currentUser]);
 
+	const sortToDos = (results) => {
+		switch (search.sortBy) {
+			case 'Oldest To-Dos':
+				return sortBy(results, (toDo) => toDo.timeStamp);
+			case 'Closest Due Date':
+				return sortBy(results, (toDo) => toDo.dueDate);
+			default:
+				return sortBy(results, (toDo) => -toDo.timeStamp);
+		}
+	};
+
 	const handleFetchToDos = async () => {
 		setToDos({
 			...toDos,
@@ -44,7 +56,8 @@ const ToDoSearch = () => {
 		try {
 			const snapshot = await fetchToDos(currentUser.uid, search);
 			const results = snapshot.docs.map((doc) => doc.data());
-			const fetchedToDos = sortBy(results, (toDo) => -toDo.dueDate);
+			// Must sort results here b/c Firebase does not support :(
+			const fetchedToDos = sortToDos(results);
 			setToDos({ ...toDos, toDoList: fetchedToDos, loading: false });
 		} catch (err) {
 			setToDos({

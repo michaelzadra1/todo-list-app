@@ -6,8 +6,12 @@ import {
 	Checkbox,
 	Box,
 	Tooltip,
-	makeStyles,
-	Typography
+	FormControl,
+	Select,
+	MenuItem,
+	Typography,
+	FormHelperText,
+	makeStyles
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -16,12 +20,21 @@ const useStyles = makeStyles((theme) => ({
 		width: '400px'
 	},
 	inputMargin: {
-		margin: `${theme.spacing(0.5)}px 0`
+		margin: `${theme.spacing(1)}px 0`
 	},
 	submitButton: {
 		marginTop: `${theme.spacing(2)}px`
+	},
+	sortBySelect: {
+		width: '300px'
+	},
+	sortByLabel: {
+		marginLeft: '0px',
+		fontSize: '1.0em'
 	}
 }));
+
+const SORT_BY_OPTIONS = ['Newest To-Dos', 'Oldest To-Dos', 'Closest Due Date'];
 
 const ToDoSearchFilters = (props) => {
 	const classes = useStyles();
@@ -68,7 +81,7 @@ const ToDoSearchFilters = (props) => {
 					/>
 				)}
 			/>
-			<Box className={classes.inputMargin}>
+			<Box className={classes.inputMargin} display="flex" flexWrap="wrap">
 				<Tooltip title="Filter by pending status" placement="top">
 					<FormControlLabel
 						control={
@@ -113,6 +126,30 @@ const ToDoSearchFilters = (props) => {
 						label="Complete"
 					/>
 				</Tooltip>
+				<FormControl variant="outlined" className={classes.sortBySelect}>
+					<Select
+						id="sort-by-select"
+						value={search.sortBy}
+						onChange={(e) =>
+							handleUpdateSearch({
+								...search,
+								sortBy: e.target.value
+							})
+						}
+						inputProps={{ 'aria-label': 'Sort By' }}
+					>
+						{SORT_BY_OPTIONS.map((option) => {
+							return (
+								<MenuItem key={option} value={option}>
+									{option}
+								</MenuItem>
+							);
+						})}
+					</Select>
+					<FormHelperText className={classes.sortByLabel}>
+						Sort By
+					</FormHelperText>
+				</FormControl>
 			</Box>
 			<Button
 				onClick={handleSearch}
