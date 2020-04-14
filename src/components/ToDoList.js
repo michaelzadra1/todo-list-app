@@ -15,19 +15,23 @@ const useStyles = makeStyles((theme) => ({
 const ToDoList = (props) => {
 	const classes = useStyles();
 
-	const [open, setOpen] = useState(false);
-	const [mode, setMode] = useState(false);
-	const [selectedToDo, setSelectedToDo] = useState({});
+	const [selectedToDo, setSelectedToDo] = useState({
+		toDo: {},
+		open: false,
+		mode: 'CREATE'
+	});
 
 	const handleOpen = ({ toDo, mode }) => {
-		setSelectedToDo(toDo);
-		setMode(mode);
-		setOpen(true);
+		setSelectedToDo({ ...setSelectedToDo, toDo, mode, open: true });
 	};
 
 	const handleClose = ({ fetchToDos }) => {
-		setOpen(false);
-		setSelectedToDo({});
+		setSelectedToDo({
+			...setSelectedToDo,
+			toDo: {},
+			open: false,
+			mode: 'CREATE'
+		});
 		if (fetchToDos) {
 			props.refreshList();
 		}
@@ -55,17 +59,16 @@ const ToDoList = (props) => {
 	);
 
 	const { toDos } = props;
+	const { open, mode, toDo } = selectedToDo;
 
 	return (
 		<React.Fragment>
-			{open ? (
-				<ToDoDialogForm
-					toDoItem={selectedToDo}
-					open={open}
-					mode={mode}
-					closeDialog={handleClose}
-				/>
-			) : null}
+			<ToDoDialogForm
+				toDoItem={toDo}
+				open={open}
+				mode={mode}
+				closeDialog={handleClose}
+			/>
 			<Box display="flex" justifyContent="center" alignItems="center">
 				<Fab
 					variant="extended"
