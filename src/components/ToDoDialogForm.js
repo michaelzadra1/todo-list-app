@@ -60,7 +60,7 @@ const ToDoDialogForm = (props) => {
 
 	const { toDoItem, open, mode, closeDialog } = props;
 
-	const { title, description, dueDate, tags, status } = toDo;
+	const { title, description, dueDate, tags } = toDo;
 
 	useEffect(() => {
 		setError({
