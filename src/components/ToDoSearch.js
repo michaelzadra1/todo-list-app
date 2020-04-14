@@ -16,9 +16,11 @@ import ToDoSearchFilters from './ToDoSearchFilters';
 const ToDoSearch = () => {
 	const { isSignedIn, currentUser } = useContext(AuthContext);
 
-	const [toDos, setToDos] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+	const [toDos, setToDos] = useState({
+		toDoList: [],
+		loading: false,
+		error: ''
+	});
 
 	const [search, setSearch] = useState({
 		searchQuery: '',
@@ -35,16 +37,21 @@ const ToDoSearch = () => {
 	}, [isSignedIn, currentUser]);
 
 	const handleFetchToDos = async () => {
-		setLoading(true);
+		setToDos({
+			...toDos,
+			loading: true
+		});
 		try {
 			const snapshot = await fetchToDos(currentUser.uid, search);
 			const results = snapshot.docs.map((doc) => doc.data());
-			const toDos = sortBy(results, (toDo) => -toDo.dueDate);
-			setToDos(toDos);
-			setLoading(false);
+			const fetchedToDos = sortBy(results, (toDo) => -toDo.dueDate);
+			setToDos({ ...toDos, toDoList: fetchedToDos, loading: false });
 		} catch (err) {
-			setLoading(false);
-			setError('Error fetching to-dos.');
+			setToDos({
+				...toDos,
+				error: 'Error fetching to-dos.',
+				loading: false
+			});
 		}
 	};
 
@@ -54,7 +61,7 @@ const ToDoSearch = () => {
 
 	const renderError = () => (
 		<FormHelperText role="error" error={true}>
-			{error}
+			{toDos.error}
 		</FormHelperText>
 	);
 
@@ -64,7 +71,6 @@ const ToDoSearch = () => {
 			justifyContent="center"
 			alignItems="center"
 			height={250}
-			fontStyle="italic"
 		>
 			<Typography
 				component="h2"
@@ -81,18 +87,18 @@ const ToDoSearch = () => {
 	);
 
 	const renderToDoList = () => {
-		return loading ? (
+		return toDos.loading ? (
 			<CircularProgress />
-		) : error ? (
+		) : toDos.error ? (
 			renderError()
 		) : (
-			<ToDoList toDos={toDos} refreshList={handleFetchToDos} />
+			<ToDoList toDos={toDos.toDoList} refreshList={handleFetchToDos} />
 		);
 	};
 
 	const renderToDoSearchFilters = () => {
 		let searchableTags = [];
-		toDos.forEach((toDo) => {
+		toDos.toDoList.forEach((toDo) => {
 			searchableTags = union(searchableTags, toDo.tags);
 		});
 		return (
