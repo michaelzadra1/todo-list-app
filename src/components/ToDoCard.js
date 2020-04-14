@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	Box,
 	Grid,
@@ -10,10 +10,15 @@ import {
 	Checkbox,
 	IconButton,
 	Tooltip,
+	CircularProgress,
+	FormHelperText,
 	makeStyles
 } from '@material-ui/core';
 import { Edit, LocalOffer, Delete, Event } from '@material-ui/icons';
 import moment from 'moment';
+
+import { AuthContext } from '../context/Auth';
+import { updateToDo } from '../api/repository.js';
 
 const useStyles = makeStyles((theme) => ({
 	toDoCardContent: {
@@ -36,13 +41,63 @@ const useStyles = makeStyles((theme) => ({
 	},
 	subTitleFont: {
 		fontSize: '1rem'
+	},
+	dialogError: {
+		paddingLeft: theme.spacing(3)
 	}
 }));
 
 const ToDoCard = (props) => {
 	const classes = useStyles();
 
-	const { title, description, dueDate, tags } = props.toDoItem;
+	const { currentUser } = useContext(AuthContext);
+
+	const {
+		title,
+		description,
+		dueDate,
+		tags,
+		pending,
+		complete
+	} = props.toDoItem;
+
+	const [status, setStatus] = useState({
+		complete,
+		pending,
+		loading: false,
+		error: ''
+	});
+
+	const handleStatusChange = async (e) => {
+		try {
+			setStatus({ ...status, loading: true, error: '' });
+
+			const isCompleting = status.complete === true ? false : true;
+			await updateToDo(currentUser.uid, {
+				...props.toDoItem,
+				pending: !isCompleting,
+				complete: isCompleting
+			});
+			setStatus({
+				...status,
+				pending: !isCompleting,
+				complete: isCompleting,
+				loading: false
+			});
+		} catch (err) {
+			setStatus({
+				...status,
+				loading: false,
+				error: 'Error updating status.'
+			});
+		}
+	};
+
+	const renderStatusError = () => (
+		<FormHelperText role="error" error={true} className={classes.dialogError}>
+			{status.error}
+		</FormHelperText>
+	);
 
 	const formattedDate = moment(dueDate.toDate()).format('DD MMMM, h:mm a');
 
@@ -52,22 +107,40 @@ const ToDoCard = (props) => {
 				<CardActions className={classes.toDoCardTopActions}>
 					{/* Status */}
 					<Box display="flex" alignItems="center">
-						<Tooltip title="Complete to-do" placement="top">
-							<Checkbox
-								defaultChecked
-								color="primary"
-								inputProps={{
-									'aria-label': 'mark as done'
-								}}
+						{status.loading ? (
+							<CircularProgress
+								color="inherit"
+								size={25}
+								style={{ marginLeft: '10px' }}
 							/>
-						</Tooltip>
-						<Typography
-							component="label"
-							variant="button"
-							color="textSecondary"
-						>
-							Pending
-						</Typography>
+						) : (
+							<React.Fragment>
+								<Tooltip
+									title={`Mark as ${
+										status.complete ? 'Pending' : 'Complete'
+									}`}
+									placement="top"
+								>
+									<Checkbox
+										checked={status.complete}
+										onClick={handleStatusChange}
+										color="primary"
+										inputProps={{
+											'aria-label': `mark as ${
+												status.complete ? 'pending' : 'complete'
+											}`
+										}}
+									/>
+								</Tooltip>
+								<Typography
+									component="label"
+									variant="button"
+									color={status.complete ? 'primary' : 'textSecondary'}
+								>
+									{status.complete ? 'Complete' : 'Pending'}
+								</Typography>
+							</React.Fragment>
+						)}
 					</Box>
 					{/* Action buttons */}
 					<Box>
@@ -102,6 +175,7 @@ const ToDoCard = (props) => {
 						</Tooltip>
 					</Box>
 				</CardActions>
+				{status.error ? renderStatusError() : null}
 				<CardContent className={classes.toDoCardContent}>
 					{/* Title & Description */}
 					<Box mb={2}>
