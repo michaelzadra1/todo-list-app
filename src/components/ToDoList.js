@@ -69,6 +69,10 @@ const ToDoList = (props) => {
 				mode={mode}
 				closeDialog={handleClose}
 			/>
+			{/* Screen reader only header */}
+			<Typography component="h2" variant="srOnly">
+				To-do item list
+			</Typography>
 			<Box display="flex" justifyContent="center" alignItems="center">
 				<Fab
 					variant="extended"

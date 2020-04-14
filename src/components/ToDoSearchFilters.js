@@ -82,6 +82,10 @@ const ToDoSearchFilters = (props) => {
 								}
 								name="toggle-pending-search"
 								color="primary"
+								inputProps={{
+									'aria-label':
+										'Toggle filter to-dos by pending status'
+								}}
 							/>
 						}
 						label="Pending"
@@ -100,6 +104,10 @@ const ToDoSearchFilters = (props) => {
 								}
 								name="toggle-complete-search"
 								color="primary"
+								inputProps={{
+									'aria-label':
+										'Toggle filter to-dos by completed status'
+								}}
 							/>
 						}
 						label="Complete"

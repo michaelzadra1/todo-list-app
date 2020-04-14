@@ -126,7 +126,7 @@ const ToDoCard = (props) => {
 										onClick={handleStatusChange}
 										color="primary"
 										inputProps={{
-											'aria-label': `mark as ${
+											'aria-label': `mark to-do as ${
 												status.complete ? 'pending' : 'complete'
 											}`
 										}}
