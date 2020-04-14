@@ -55,7 +55,6 @@ const ToDoSearchFilters = (props) => {
 				className={classes.inputMargin}
 				id="search-tags"
 				multiple
-				getOptionLabel={(option) => option.toLowerCase()}
 				options={searchableTags}
 				onChange={(_, values) =>
 					handleUpdateSearch({ ...search, tags: [...values] })

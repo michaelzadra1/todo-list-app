@@ -239,7 +239,6 @@ const ToDoDialogForm = (props) => {
 						className={classes.tagsInput}
 						id="to-do-tags"
 						multiple
-						getOptionLabel={(option) => option.toLowerCase()}
 						options={tags}
 						value={tags}
 						onChange={(_, values) =>
